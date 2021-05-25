@@ -35,12 +35,12 @@ io.on("connection", (socket) => {
 
     socket.join(user.room);
 
-    socket.emit("message", generateMessage("Šef", "Šta ima, ONO?"));
+    socket.emit("message", generateMessage("Admin", "Welcome, what's up?"));
     socket.broadcast
       .to(user.room)
       .emit(
         "message",
-        generateMessage("Šef", `Pazi šta pričaš, ${user.username} je ušo!`)
+        generateMessage("Admin", `${user.username} has joined!`)
       );
     io.to(user.room).emit("roomData", {
       room: user.room,
@@ -55,7 +55,7 @@ io.on("connection", (socket) => {
     const filter = new Filter();
 
     if (filter.isProfane(message)) {
-      return callback("Ne psuj!");
+      return callback("Don't use bad language!");
     }
 
     io.to(user.room).emit("message", generateMessage(user.username, message));
@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
     if (user) {
       io.to(user.room).emit(
         "message",
-        generateMessage("Šef", `${user.username} je oša ča!`)
+        generateMessage("Admin", `${user.username} has left!`)
       );
       io.to(user.room).emit("roomData", {
         room: user.room,
